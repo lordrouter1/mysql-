@@ -11,20 +11,34 @@ void MysqlResponse::operator=(MYSQL_RES *res)
     MYSQL_FIELD *campos;
     MYSQL_ROW linhas;
     MYSQL_RES *response = res;
-
-    if(!response) return;
-
     MysqlRow temp;
+    int flag = 0;
 
     this->resp.clear();
+    this->fields.clear();
 
-    campos = mysql_fetch_fields(response);
-    while((linhas = mysql_fetch_row(response)) != NULL)
+    if(response && mysql_num_rows(res) > 0)
     {
-        for(int i = 0; i < mysql_num_fields(response); i++)
+        campos = mysql_fetch_fields(response);
+        while((linhas = mysql_fetch_row(response)) != NULL)
         {
-            temp[campos[i].name] = linhas[i];
+            for(int i = 0; i < mysql_num_fields(response); i++)
+            {
+                if(flag == 0)
+                {
+                    this->fields.push_back(campos[i].name);
+                }
+
+                temp[campos[i].name] = linhas[i];
+            }
+            this->resp.push_back(temp);
+            flag++;
         }
+
+        mysql_free_result(response);
+    }
+    else
+    {
         this->resp.push_back(temp);
     }
 }
@@ -55,4 +69,9 @@ int MysqlResponse::next()
     {
         return -1;
     }
+}
+
+std::vector<std::string> MysqlResponse::getFields()
+{
+    return this->fields;
 }

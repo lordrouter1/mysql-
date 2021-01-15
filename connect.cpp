@@ -39,19 +39,25 @@ MysqlConnect::MysqlConnect()
 
 MYSQL_RES *MysqlConnect::query(std::string query)
 {
-    if(mysql_query(&this->con,query.c_str()))
+    int a = mysql_query(&this->con,query.c_str());
+
+    if(a)
     {
         return NULL;
     }
     else
-    {
+    {   
         return mysql_store_result(&this->con);
     }
-
-    return NULL;
 }
 
 std::string MysqlConnect::error()
 {
     return mysql_error(&this->con);
+}
+
+void MysqlConnect::close()
+{
+    mysql_close(&this->con);
+
 }

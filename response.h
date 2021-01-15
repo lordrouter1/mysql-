@@ -17,6 +17,7 @@ class MysqlResponse
 
         int num_rows();
         int next();
+        std::vector<std::string> getFields();
 
         void operator=(MYSQL_RES *res);
         MysqlRow operator[](int row);
@@ -24,6 +25,7 @@ class MysqlResponse
 
     private:
         std::vector<MysqlRow> resp;
+        std::vector<std::string> fields;
 };
 
 

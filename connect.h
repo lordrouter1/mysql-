@@ -18,6 +18,7 @@ class MysqlConnect
         MysqlConnect();
 
         MYSQL_RES *query(std::string query);
+        void close();
 
         std::string error();
         
