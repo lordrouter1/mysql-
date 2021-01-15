@@ -1,7 +1,9 @@
 #include "cabecalho.h"
 
 int main(){
+    
     MysqlConnect *con = new MysqlConnect("localhost","mysqlcpp","mysqlcpp","db_cpp");
+    
     MysqlResponse resp;
 
     std::cout << con->error();
